@@ -1,23 +1,25 @@
 import ApexChart from "../../../components/ui/ApexChart"
 import "../styles/diogramm.css"
+import { BestSellingProduct } from "./BestSellingProduct"
+import { TopProducts } from "./TopProducts"
 import UsersInfo from "./UsersInfo"
 
 
 export const Dashboard = () => {
   return (
-    <div className="w-full">
+    <div className="w-full position-relative">
     <div className="grid grid-cols-3 gap-4 w-full">
       
       {/* Total Sales */}
-      <div className="h-55.5 rounded-lg p-5 bg-white">
+      <div className="total-card h-55.5 rounded-lg p-5 ">
         <div className="flex justify-between items-center">
-          <b className="text-[18px] text-[#23272E]">Total Sales</b>
+          <b className="text-[18px] ">Total Sales</b>
           <span>
             <i className="bi bi-three-dots-vertical"></i>
           </span>
         </div>
   
-        <span className="text-[#6A717F] text-[14px]">Last 7 days</span>
+        <span className="text-[#b3bbcc] text-[14px]">Last 7 days</span>
   
         <div className="flex items-center gap-4">
           <p className="text-[32px]">$350K</p>
@@ -29,7 +31,7 @@ export const Dashboard = () => {
           </span>
         </div>
   
-        <span className="text-[14px] text-[#23272E]">
+        <span className="text-[14px] text-[#606772]">
           Previous 7days{" "}
           <span className="text-[#6467F2]">($235)</span>
         </span>
@@ -42,15 +44,15 @@ export const Dashboard = () => {
       </div>
   
       {/* Total Orders */}
-      <div className="h-55.5 rounded-lg p-5 bg-white">
+      <div className="total-card h-55.5 rounded-lg p-5 ">
         <div className="flex justify-between items-center">
-          <b className="text-[18px] text-[#23272E]">Total Orders</b>
+          <b className="text-[18px]">Total Orders</b>
           <span>
             <i className="bi bi-three-dots-vertical"></i>
           </span>
         </div>
   
-        <span className="text-[#6A717F] text-[14px]">Last 7 days</span>
+        <span className="text-[#b3bbcc] text-[14px]">Last 7 days</span>
   
         <div className="flex items-center gap-4">
           <p className="text-[32px]">$350K</p>
@@ -62,7 +64,7 @@ export const Dashboard = () => {
           </span>
         </div>
   
-        <span className="text-[14px] text-[#23272E]">
+        <span className="text-[14px] text-[#606772]">
           Previous 7days{" "}
           <span className="text-[#6467F2]">($235)</span>
         </span>
@@ -75,9 +77,9 @@ export const Dashboard = () => {
       </div>
   
       {/* Pending & Canceled */}
-      <div className="h-55.5 rounded-lg p-5 bg-white">
+      <div className="total-card h-55.5 rounded-lg p-5 ">
         <div className="flex justify-between items-center">
-          <b className="text-[18px] text-[#23272E]">
+          <b className="text-[18px]">
             Pending & Canceled
           </b>
           <span>
@@ -85,7 +87,7 @@ export const Dashboard = () => {
           </span>
         </div>
   
-        <span className="text-[#6A717F] text-[14px]">Last 7 days</span>
+        <span className="text-[#b3bbcc] text-[14px]">Last 7 days</span>
   
         <div className="flex items-center gap-4">
           <p className="text-[32px]">$350K</p>
@@ -97,7 +99,7 @@ export const Dashboard = () => {
           </span>
         </div>
   
-        <span className="text-[14px] text-[#23272E]">
+        <span className="text-[14px] text-[#606772]">
           Previous 7days{" "}
           <span className="text-[#6467F2]">($235)</span>
         </span>
@@ -114,6 +116,10 @@ export const Dashboard = () => {
     <div className="diogramm mt-5 grid grid-cols-12 gap-4">
       <ApexChart />
       <UsersInfo/>
+    </div>
+    <div className="mt-5 grid grid-cols-12 gap-4">
+      <BestSellingProduct/>
+      <TopProducts/>
     </div>
   </div>
   )

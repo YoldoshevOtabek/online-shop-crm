@@ -9,7 +9,7 @@ body{
     --bg-muted: #182020;
     --border: #1c2222;
     --border-strong: #252d2d;
-    --text: #f3f5f7;
+    --text: #ffffff;
     --text-muted: #737878;
     --text-secondary: #aeb8b8;
     --accent: #3e90f0;
@@ -62,4 +62,24 @@ body{
 }
 .layout-header{
     border-bottom: 2px solid #0000001F;
+}
+.total-card{
+  background-color: var(--bg-surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+.apexChart{
+  background-color: var(--bg-surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+.userInfo{
+  background-color: var(--bg-surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+.mood{
+  background-color: var(--bg-surface);
+  color: var(--text);
+  border-color: var(--border);
 }

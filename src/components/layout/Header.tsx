@@ -19,8 +19,6 @@ export const Header = () => {
   };
   const title = getPageTitle(location.pathname);
 
-  const [dark, setDark] = useState(false);
-
   return (
     <div className="layout-header w-full h-24 flex items-center justify-between px-6">
       <div>
@@ -46,22 +44,19 @@ export const Header = () => {
           <div className="flex items-center">
             <Bell />
           </div>
-          {/* Mood  */}
+          {/* Mood */}
           <div className="flex items-center">
             <button
               className={`mood w-10 h-7 rounded-full p-1 flex items-center transition-all duration-300
-              ${dark ? "bg-[#EAF7E8] justify-start" : "bg-[#69898b] justify-end"}
-              `}
-              onClick={() => {
-                setTheme(!theme);
-                setDark(!dark);
-              }}
+               ${theme ? "bg-[#69898b] justify-end" : "bg-[#EAF7E8] justify-start"}
+                `}
+              onClick={() => setTheme(!theme)}
             >
-              <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
-                {dark ? (
-                  <Moon size={13} className="text-[#023337]" />
-                ) : (
+              <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm">
+                {theme ? (
                   <Sun size={13} className="text-yellow-500" />
+                ) : (
+                  <Moon size={13} className="text-[#023337]" />
                 )}
               </div>
             </button>

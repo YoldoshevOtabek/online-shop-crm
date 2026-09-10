@@ -35,7 +35,7 @@ const countries = [
   
   export default function UsersInfo() {
     return (
-      <div className="col-span-4 rounded-lg border border-[#E5E7EB] bg-white overflow-hidden">
+      <div className="userInfo col-span-4 rounded-lg border border-[#E5E7EB] bg-white overflow-hidden">
   
         {/* Header */}
         <div className="px-4 pt-4">
@@ -45,7 +45,7 @@ const countries = [
                 Users in last 30 minutes
               </p>
   
-              <h2 className="text-[22px] font-semibold text-[#23272E]">
+              <h2 className="text-[22px] font-semibold ">
                 21.5K
               </h2>
             </div>
@@ -56,7 +56,7 @@ const countries = [
           </div>
   
           {/* Users per minute */}
-          <p className="mt-3 text-[10px] text-[#6A717F]">
+          <p className="mt-3 text-[10px] text-[#99a8c7]">
             Users per minute
           </p>
   
@@ -74,17 +74,17 @@ const countries = [
   
         {/* Country header */}
         <div className="mt-3 flex justify-between border-b border-[#E5E7EB] px-4 pb-1">
-          <span className="text-[11px] font-medium text-[#23272E]">
+          <span className="text-[11px] font-medium ">
             Sales by Country
           </span>
   
-          <span className="text-[11px] font-medium text-[#23272E]">
+          <span className="text-[11px] font-medium ">
             Sales
           </span>
         </div>
   
         {/* Countries */}
-        <div className="bg-[#F9FAFB] px-3">
+        <div className=" px-3">
   
           {countries.map((item, index) => (
             <div
@@ -99,7 +99,7 @@ const countries = [
   
               {/* User info */}
               <div className="w-[62px]">
-                <p className="text-[11px] font-medium text-[#23272E]">
+                <p className="text-[11px] font-medium ">
                   {item.users}
                 </p>
   

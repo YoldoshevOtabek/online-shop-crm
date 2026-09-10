@@ -30,6 +30,9 @@ const ApexChart = () => {
     title: {
       text: "Renewable Energy Generation",
       align: "left",
+      style: {
+        color: "var(--text)",
+      },
     },
 
     xaxis: {
@@ -42,12 +45,21 @@ const ApexChart = () => {
         "2025-06-05",
         "2025-06-06",
         "2025-06-07",
-        
       ],
+
+      labels: {
+        style: {
+          colors: "var(--text)",
+        },
+      },
     },
 
     yaxis: {
       labels: {
+        style: {
+          colors: "var(--text)",
+        },
+
         formatter: (val) => `${val} GWh`,
       },
     },
@@ -57,10 +69,16 @@ const ApexChart = () => {
         format: "dd MMM yyyy",
       },
     },
+
+    legend: {
+      labels: {
+        colors: "var(--text)",
+      },
+    },
   };
 
   return (
-    <div className="bg-white shadow-[0px_1px_3px_0px_#00000033] rounded-lg col-span-8">
+    <div className="apexChart shadow-[0px_1px_3px_0px_#00000033] rounded-lg col-span-8 p-2.5">
       <ReactApexChart
         options={options}
         series={series}

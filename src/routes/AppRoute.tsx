@@ -5,6 +5,7 @@ import { Products } from "../features/products/pages/Products"
 import { OrderManagement } from "../features/order_Management/pages/OrderManagement"
 import { Categories } from "../features/categories/pages/Categories"
 import { Customers } from "../features/customers/pages/Customers"
+import { Login } from "../features/auth/pages/Login"
 
 
 export const AppRoute = () => {
@@ -17,6 +18,8 @@ export const AppRoute = () => {
             <Route path="/categories" element={<Categories/>}/>
             <Route path="/customers" element={<Customers/>}/>
         </Route>
+
+        <Route path="/login" element={<Login/>}/>
     </Routes>
   )
 }

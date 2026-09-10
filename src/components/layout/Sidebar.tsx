@@ -1,11 +1,19 @@
 import { useState } from "react"
 import logo from "../../assets/svg/logo.svg"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { sidebarMenu } from "../../routes/Route"
 import userPhoto from "../../assets/img/photo_2026-08-13_12-27-13.png" 
+import { useTheme } from "../../context/ThemeContext"
 
 export const Sidebar = () => {
     const [openToggle, setOpenToggle] = useState(false)
+    const { theme } = useTheme();
+    const navigate = useNavigate()
+    const handleLogout = () => {
+      
+      navigate("/login", { replace: true });
+    };
+
   return (
     <div className={`${openToggle? "w-20" : " w-65"} layout-sidebar transition-all duration-300 h-screen flex flex-col justify-between shrink-0` }>
         <div>
@@ -36,7 +44,7 @@ export const Sidebar = () => {
               ${
                 isActive
                   ? "bg-[#4EA674] text-white"
-                  : "text-gray-500 hover:bg-gray-100"
+                  : `${!theme ? "hover:bg-[#333]" : "hover:bg-[#e4e2e2]" } text-gray-500 `
               }`
             }
           >
@@ -64,9 +72,9 @@ export const Sidebar = () => {
             </div> : "" }
             
           
-            <div className={`${openToggle? "mt-3" : ""} flex justify-center align-middle`}>
-            <i className="bi bi-box-arrow-left text-red-600"></i>
-            </div> 
+            <button onClick={handleLogout} className={`${openToggle? "mt-3" : ""} flex justify-center items-center`}>
+            <i className="bi bi-box-arrow-left text-red-600 cursor-pointer"></i>
+            </button> 
             
         </div>
 
