@@ -35,7 +35,7 @@ const countries = [
   
   export default function UsersInfo() {
     return (
-      <div className="userInfo col-span-4 rounded-lg border border-[#E5E7EB] bg-white overflow-hidden">
+      <div className="content-mood col-span-4 rounded-lg border border-[#E5E7EB] bg-white overflow-hidden">
   
         {/* Header */}
         <div className="px-4 pt-4">

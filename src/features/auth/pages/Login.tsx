@@ -1,9 +1,20 @@
-
 import { useState } from "react";
-import { Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
+import {
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  LockOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
+import { Button, Checkbox, Form, Input } from "antd";
+import useLogin from "../hooks/useLogin";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { mutate, isPending } = useLogin();
+
+  const onFinish = (values: { email: string; password: string }) => {
+    mutate(values);
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#080B12] flex items-center justify-center px-4">
@@ -33,7 +44,9 @@ export const Login = () => {
           {/* Logo */}
           <div className="flex justify-center mb-6">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
-              <LockKeyhole className="text-white" size={27} />
+              <LockOutlined
+                style={{ fontSize: 27, color: "white" }}
+              />
             </div>
           </div>
 
@@ -49,76 +62,102 @@ export const Login = () => {
           </div>
 
           {/* Form */}
-          <form className="space-y-5">
+          <Form
+            layout="vertical"
+            onFinish={onFinish}
+            requiredMark={false}
+            className="login-form"
+          >
 
             {/* Email */}
-            <div>
-              <label className="text-sm text-gray-300 mb-2 block">
-                Email
-              </label>
-
-              <div className="relative">
-                <Mail
-                  size={19}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
-                />
-
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full h-13 pl-11 pr-4 rounded-xl bg-black/20 border border-white/10 text-white placeholder:text-gray-500 outline-none transition-all focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
-                />
-              </div>
-            </div>
-           
+            <Form.Item
+              label={
+                <span className="text-sm text-gray-300">
+                  Email
+                </span>
+              }
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: "Email kiriting",
+                },
+                {
+                  type: "email",
+                  message: "Email noto'g'ri",
+                },
+              ]}
+            >
+              <Input
+                size="large"
+                prefix={
+                  <MailOutlined className="text-gray-500" />
+                }
+                placeholder="Enter your email"
+                className="custom-input"
+              />
+            </Form.Item>
 
             {/* Password */}
-            <div>
-              <label className="text-sm text-gray-300 mb-2 block">
-                Password
-              </label>
-
-              <div className="relative">
-                <LockKeyhole
-                  size={19}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
-                />
-
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  className="w-full h-13 pl-11 pr-12 rounded-xl bg-black/20 border border-white/10 text-white placeholder:text-gray-500 outline-none transition-all focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
-                />
-
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition"
-                >
-                  {showPassword ? (
-                    <EyeOff size={19} />
-                  ) : (
-                    <Eye size={19} />
-                  )}
-                </button>
-              </div>
-            </div>
+            <Form.Item
+              label={
+                <span className="text-sm text-gray-300">
+                  Password
+                </span>
+              }
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Password kiriting",
+                },
+                {
+                  min: 6,
+                  message: "Password kamida 6 ta belgidan iborat bo'lishi kerak",
+                },
+              ]}
+            >
+              <Input
+                size="large"
+                type={showPassword ? "text" : "password"}
+                prefix={
+                  <LockOutlined className="text-gray-500" />
+                }
+                suffix={
+                  <span
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="cursor-pointer text-gray-500 hover:text-white transition"
+                  >
+                    {showPassword ? (
+                      <EyeInvisibleOutlined />
+                    ) : (
+                      <EyeOutlined />
+                    )}
+                  </span>
+                }
+                placeholder="Enter your password"
+                className="custom-input"
+              />
+            </Form.Item>
 
             {/* Remember */}
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between text-sm mb-5">
 
-              <label className="flex items-center gap-2 text-gray-400 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 accent-purple-600"
-                />
-
-                Remember me
-              </label>
+              <Form.Item
+                name="remember"
+                valuePropName="checked"
+                noStyle
+              >
+                <Checkbox className="custom-checkbox">
+                  <span className="text-gray-400">
+                    Remember me
+                  </span>
+                </Checkbox>
+              </Form.Item>
 
               <button
                 type="button"
-                className="text-purple-400 hover:text-purple-300 transition"
+                className="text-purple-400 hover:text-purple-300 transition bg-transparent border-none cursor-pointer"
               >
                 Forgot password?
               </button>
@@ -126,14 +165,19 @@ export const Login = () => {
             </div>
 
             {/* Login button */}
-            <button
-              type="submit"
-              className="w-full h-13 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 hover:scale-[1.01] active:scale-[0.99] transition-all"
-            >
-              Login
-            </button>
+            <Form.Item className="mb-0">
+              <Button
+                htmlType="submit"
+                loading={isPending}
+                block
+                size="large"
+                className="login-button"
+              >
+                {isPending ? "Loading..." : "Login"}
+              </Button>
+            </Form.Item>
 
-          </form>
+          </Form>
 
           {/* Bottom */}
           <p className="text-center text-sm text-gray-500 mt-7">
@@ -256,8 +300,91 @@ export const Login = () => {
             opacity: 0;
           }
         }
+
+        /* Ant Design Input */
+        .login-form .custom-input {
+          height: 52px;
+          background: rgba(0, 0, 0, 0.20) !important;
+          border: 1px solid rgba(255,255,255,0.10) !important;
+          color: white !important;
+          border-radius: 12px;
+          box-shadow: none !important;
+        }
+
+        .login-form .custom-input:hover {
+          border-color: rgba(139,92,246,0.7) !important;
+        }
+
+        .login-form .custom-input:focus,
+        .login-form .custom-input.ant-input-affix-wrapper-focused {
+          border-color: #8b5cf6 !important;
+          box-shadow: 0 0 0 2px rgba(139,92,246,0.20) !important;
+        }
+
+        .login-form .custom-input input {
+          background: transparent !important;
+          color: white !important;
+        }
+
+        .login-form .custom-input input::placeholder {
+          color: #6b7280 !important;
+        }
+
+        /* Ant Design label */
+        .login-form .ant-form-item {
+          margin-bottom: 20px;
+        }
+
+        .login-form .ant-form-item-label {
+          padding-bottom: 8px;
+        }
+
+        /* Checkbox */
+        .custom-checkbox .ant-checkbox-inner {
+          background: rgba(0,0,0,0.2);
+          border-color: rgba(255,255,255,0.15);
+        }
+
+        .custom-checkbox:hover .ant-checkbox-inner {
+          border-color: #8b5cf6 !important;
+        }
+
+        /* Login button */
+        .login-button {
+          height: 52px !important;
+          border: none !important;
+          border-radius: 12px !important;
+          background: linear-gradient(
+            to right,
+            #9333ea,
+            #4f46e5
+          ) !important;
+          color: white !important;
+          font-weight: 600;
+          box-shadow: 0 10px 25px rgba(147,51,234,0.20);
+          transition: all 0.2s ease;
+        }
+
+        .login-button:hover {
+          transform: scale(1.01);
+          box-shadow: 0 10px 30px rgba(147,51,234,0.40) !important;
+        }
+
+        .login-button:active {
+          transform: scale(0.99);
+        }
+
+        .login-button.ant-btn-loading {
+          opacity: 0.8;
+        }
+
+        /* Error text */
+        .login-form .ant-form-item-explain-error {
+          color: #f87171;
+          font-size: 12px;
+          margin-top: 4px;
+        }
       `}</style>
     </div>
   );
 };
-

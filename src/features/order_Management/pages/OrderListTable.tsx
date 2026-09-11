@@ -1,296 +1,451 @@
+
+import { useState } from "react";
 import {
-    Search,
-    SlidersHorizontal,
-    ArrowDownUp,
-    MoreHorizontal,
-    ChevronLeft,
-    ChevronRight,
-    Truck,
-  } from "lucide-react";
-  
-  type Order = {
-    id: string;
-    product: string;
-    date: string;
-    price: string;
-    payment: "Paid" | "Unpaid";
-    status: "Delivered" | "Pending" | "Shipped" | "Cancelled";
-    icon: string;
-  };
-  
-  const orders: Order[] = [
+  ArrowDownUp,
+  MoreHorizontal,
+  SlidersHorizontal,
+  Truck,
+} from "lucide-react";
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  Input,
+  Pagination,
+  Table,
+  Tag,
+} from "antd";
+import type { ColumnsType } from "antd/es/table";
+import type { MenuProps } from "antd";
+
+type Order = {
+  key: string;
+  id: string;
+  product: string;
+  date: string;
+  price: string;
+  payment: "Paid" | "Unpaid";
+  status: "Delivered" | "Pending" | "Shipped" | "Cancelled";
+  icon: string;
+};
+
+const orders: Order[] = [
+  {
+    key: "1",
+    id: "#ORD0001",
+    product: "Wireless Bluetooth Headphones",
+    date: "01-01-2025",
+    price: "49.99",
+    payment: "Paid",
+    status: "Delivered",
+    icon: "🎧",
+  },
+  {
+    key: "2",
+    id: "#ORD0002",
+    product: "Men's T-Shirt",
+    date: "01-01-2025",
+    price: "14.99",
+    payment: "Unpaid",
+    status: "Pending",
+    icon: "👕",
+  },
+  {
+    key: "3",
+    id: "#ORD0003",
+    product: "Men's Leather Wallet",
+    date: "01-01-2025",
+    price: "49.99",
+    payment: "Paid",
+    status: "Delivered",
+    icon: "👛",
+  },
+  {
+    key: "4",
+    id: "#ORD0004",
+    product: "Memory Foam Pillow",
+    date: "01-01-2025",
+    price: "39.99",
+    payment: "Paid",
+    status: "Shipped",
+    icon: "🛏️",
+  },
+  {
+    key: "5",
+    id: "#ORD0005",
+    product: "Adjustable Dumbbells",
+    date: "01-01-2025",
+    price: "14.99",
+    payment: "Unpaid",
+    status: "Pending",
+    icon: "🏋️",
+  },
+  {
+    key: "6",
+    id: "#ORD0006",
+    product: "Coffee Maker",
+    date: "01-01-2025",
+    price: "79.99",
+    payment: "Unpaid",
+    status: "Cancelled",
+    icon: "☕",
+  },
+  {
+    key: "7",
+    id: "#ORD0007",
+    product: "Casual Baseball Cap",
+    date: "01-01-2025",
+    price: "49.99",
+    payment: "Paid",
+    status: "Delivered",
+    icon: "🧢",
+  },
+  {
+    key: "8",
+    id: "#ORD0008",
+    product: "Full HD Webcam",
+    date: "01-01-2025",
+    price: "39.99",
+    payment: "Paid",
+    status: "Delivered",
+    icon: "📷",
+  },
+  {
+    key: "9",
+    id: "#ORD0009",
+    product: "Smart LED Color Bulb",
+    date: "01-01-2025",
+    price: "79.99",
+    payment: "Unpaid",
+    status: "Delivered",
+    icon: "💡",
+  },
+  {
+    key: "10",
+    id: "#ORD0010",
+    product: "Men's T-Shirt",
+    date: "01-01-2025",
+    price: "14.99",
+    payment: "Unpaid",
+    status: "Delivered",
+    icon: "👕",
+  },
+];
+
+type TabType = "All" | "Completed" | "Pending" | "Canceled";
+
+export default function OrdersTable() {
+  const [activeTab, setActiveTab] = useState<TabType>("All");
+  const [search, setSearch] = useState("");
+
+  // Tab bo'yicha filter
+  const filteredByTab = orders.filter((order) => {
+    if (activeTab === "All") return true;
+
+    if (activeTab === "Completed") {
+      return order.status === "Delivered";
+    }
+
+    if (activeTab === "Pending") {
+      return order.status === "Pending";
+    }
+
+    if (activeTab === "Canceled") {
+      return order.status === "Cancelled";
+    }
+
+    return true;
+  });
+
+  // Search
+  const filteredOrders = filteredByTab.filter((order) =>
+    `${order.id} ${order.product} ${order.payment} ${order.status}`
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+
+  const columns: ColumnsType<Order> = [
     {
-      id: "#ORD0001",
-      product: "Wireless Bluetooth Headphones",
-      date: "01-01-2025",
-      price: "49.99",
-      payment: "Paid",
-      status: "Delivered",
-      icon: "🎧",
+      title: "No.",
+      key: "number",
+      width: 70,
+      render: (_, __, index) => (
+        <div className="flex items-center gap-2">
+          <Checkbox />
+          <span>{index + 1}</span>
+        </div>
+      ),
     },
+
     {
-      id: "#ORD0001",
-      product: "Men's T-Shirt",
-      date: "01-01-2025",
-      price: "14.99",
-      payment: "Unpaid",
-      status: "Pending",
-      icon: "👕",
+      title: "Order Id",
+      dataIndex: "id",
+      key: "id",
+      width: 130,
+      render: (id) => (
+        <span className="font-medium ">{id}</span>
+      ),
     },
+
     {
-      id: "#ORD0001",
-      product: "Men's Leather Wallet",
-      date: "01-01-2025",
-      price: "49.99",
-      payment: "Paid",
-      status: "Delivered",
-      icon: "👛",
+      title: "Product",
+      dataIndex: "product",
+      key: "product",
+      width: 280,
+      render: (product, record) => (
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-lg">
+            {record.icon}
+          </div>
+
+          <span className="font-medium ">
+            {product}
+          </span>
+        </div>
+      ),
     },
+
     {
-      id: "#ORD0001",
-      product: "Memory Foam Pillow",
-      date: "01-01-2025",
-      price: "39.99",
-      payment: "Paid",
-      status: "Shipped",
-      icon: "🛏️",
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+      width: 130,
     },
+
     {
-      id: "#ORD0001",
-      product: "Adjustable Dumbbells",
-      date: "01-01-2025",
-      price: "14.99",
-      payment: "Unpaid",
-      status: "Pending",
-      icon: "🏋️",
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      width: 110,
+      render: (price) => (
+        <span className="font-medium">${price}</span>
+      ),
     },
+
     {
-      id: "#ORD0001",
-      product: "Coffee Maker",
-      date: "01-01-2025",
-      price: "79.99",
-      payment: "Unpaid",
-      status: "Cancelled",
-      icon: "☕",
+      title: "Payment",
+      dataIndex: "payment",
+      key: "payment",
+      width: 130,
+      render: (payment) => (
+        <div className="flex items-center gap-2">
+          <span
+            className={`h-2 w-2 rounded-full ${
+              payment === "Paid"
+                ? "bg-emerald-500"
+                : "bg-red-500"
+            }`}
+          />
+
+          <span
+            className={
+              payment === "Paid"
+                ? "text-emerald-600"
+                : "text-red-500"
+            }
+          >
+            {payment}
+          </span>
+        </div>
+      ),
     },
+
     {
-      id: "#ORD0001",
-      product: "Casual Baseball Cap",
-      date: "01-01-2025",
-      price: "49.99",
-      payment: "Paid",
-      status: "Delivered",
-      icon: "🧢",
-    },
-    {
-      id: "#ORD0001",
-      product: "Full HD Webcam",
-      date: "01-01-2025",
-      price: "39.99",
-      payment: "Paid",
-      status: "Delivered",
-      icon: "📷",
-    },
-    {
-      id: "#ORD0001",
-      product: "Smart LED Color Bulb",
-      date: "01-01-2025",
-      price: "79.99",
-      payment: "Unpaid",
-      status: "Delivered",
-      icon: "💡",
-    },
-    {
-      id: "#ORD0001",
-      product: "Men's T-Shirt",
-      date: "01-01-2025",
-      price: "14.99",
-      payment: "Unpaid",
-      status: "Delivered",
-      icon: "👕",
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      width: 150,
+      render: (status) => {
+        const statusConfig:any = {
+          Delivered: {
+            color: "success",
+            text: "Delivered",
+          },
+          Pending: {
+            color: "warning",
+            text: "Pending",
+          },
+          Shipped: {
+            color: "default",
+            text: "Shipped",
+          },
+          Cancelled: {
+            color: "error",
+            text: "Cancelled",
+          },
+        } as const;
+
+        const config = statusConfig[status];
+
+        return (
+          <Tag
+            color={config.color}
+            className="flex w-fit items-center gap-1 rounded-full px-3 py-1"
+          >
+            <Truck size={13} />
+            {config.text}
+          </Tag>
+        );
+      },
     },
   ];
-  
-  const statusStyles = {
-    Delivered: "text-emerald-500",
-    Pending: "text-orange-400",
-    Shipped: "text-gray-700",
-    Cancelled: "text-red-400",
-  };
-  
-  const paymentStyles = {
-    Paid: "bg-emerald-500",
-    Unpaid: "bg-red-500",
-  };
-  
-  export default function OrdersTable() {
-    return (
-      <div className="min-h-screen bg-white p-3 font-sans text-[11px] text-gray-700">
-        <div className="w-full overflow-hidden rounded-sm border border-[#d9e9d6] bg-white shadow-sm">
-          {/* Top navigation */}
-          <div className="flex items-center justify-between gap-4 px-4 py-3">
-            <div className="flex h-7 items-center rounded-md bg-[#eaf6e7] p-0.5">
-              <button className="h-6 rounded-md bg-white px-3 font-medium text-gray-700 shadow-sm">
-                All order <span className="text-emerald-500">(240)</span>
+
+  const menuItems: MenuProps["items"] = [
+    {
+      key: "1",
+      label: "View order",
+    },
+    {
+      key: "2",
+      label: "Edit order",
+    },
+    {
+      key: "3",
+      label: "Delete order",
+      danger: true,
+    },
+  ];
+
+  const tabs: {
+    label: string;
+    value: TabType;
+    count: number;
+  }[] = [
+    {
+      label: "All order",
+      value: "All",
+      count: orders.length,
+    },
+    {
+      label: "Completed",
+      value: "Completed",
+      count: orders.filter(
+        (item) => item.status === "Delivered"
+      ).length,
+    },
+    {
+      label: "Pending",
+      value: "Pending",
+      count: orders.filter(
+        (item) => item.status === "Pending"
+      ).length,
+    },
+    {
+      label: "Canceled",
+      value: "Canceled",
+      count: orders.filter(
+        (item) => item.status === "Cancelled"
+      ).length,
+    },
+  ];
+
+  return (
+    <div className="content-bg w-full min-h-[calc(100vh-96px)] bg-white p-6">
+
+      {/* Main Card */}
+      <div className="content-mood w-full rounded-xl border border-[#d9e9d6] bg-white shadow-[0px_1px_3px_0px_#00000033]">
+
+        {/* Header */}
+        <div className="flex items-center justify-between gap-5 px-6 py-5">
+
+          {/* Tabs */}
+          <div className="flex items-center rounded-lg bg-[#eaf6e7] p-1">
+
+            {tabs.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setActiveTab(tab.value)}
+                className={`
+                  h-9 rounded-md px-5 text-sm transition-all
+                  ${
+                    activeTab === tab.value
+                      ? "bg-white font-semibold text-gray-800 shadow-sm"
+                      : "text-gray-500 hover:text-gray-800"
+                  }
+                `}
+              >
+                {tab.label}
+
+                <span
+                  className={`ml-1.5 ${
+                    activeTab === tab.value
+                      ? "text-emerald-500"
+                      : "text-gray-400"
+                  }`}
+                >
+                  ({tab.count})
+                </span>
               </button>
-  
-              <button className="px-5 text-gray-500">Completed</button>
-              <button className="px-5 text-gray-500">Pending</button>
-              <button className="px-5 text-gray-500">Canceled</button>
-            </div>
-  
-            <div className="flex items-center gap-2">
-              {/* Search */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search order report"
-                  className="h-8 w-40 rounded-md border-none bg-gray-50 pl-3 pr-8 text-[10px] outline-none placeholder:text-gray-400 focus:ring-1 focus:ring-emerald-200"
-                />
-                <Search
-                  size={14}
-                  className="absolute right-2.5 top-2 text-gray-500"
-                />
-              </div>
-  
-              <button className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50">
-                <SlidersHorizontal size={14} />
-              </button>
-  
-              <button className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50">
-                <ArrowDownUp size={14} />
-              </button>
-  
-              <button className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50">
-                <MoreHorizontal size={15} />
-              </button>
-            </div>
+            ))}
+
           </div>
-  
-          {/* Table */}
-          <div className="px-4">
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="h-8 rounded-md bg-[#e7f5e3] text-left text-[10px] font-medium text-gray-700">
-                    <th className="w-[52px] rounded-l-md pl-2">No.</th>
-                    <th className="w-[110px]">Order Id</th>
-                    <th className="w-[190px]">Product</th>
-                    <th className="w-[105px]">Date</th>
-                    <th className="w-[90px]">Price</th>
-                    <th className="w-[100px]">Payment</th>
-                    <th className="rounded-r-md">Status</th>
-                  </tr>
-                </thead>
-  
-                <tbody>
-                  {orders.map((order, index) => (
-                    <tr
-                      key={`${order.id}-${index}`}
-                      className="h-[41px] border-b border-gray-200 last:border-b-0"
-                    >
-                      {/* Number */}
-                      <td className="pl-2">
-                        <div className="flex items-center gap-2">
-                          <span className="h-3 w-3 rounded-[2px] border border-[#dcebd9]" />
-                          <span>{index + 1}</span>
-                        </div>
-                      </td>
-  
-                      {/* Order ID */}
-                      <td className="font-medium text-gray-700">
-                        {order.id}
-                      </td>
-  
-                      {/* Product */}
-                      <td>
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-50 text-sm">
-                            {order.icon}
-                          </div>
-  
-                          <span className="max-w-[130px] leading-[12px]">
-                            {order.product}
-                          </span>
-                        </div>
-                      </td>
-  
-                      {/* Date */}
-                      <td>{order.date}</td>
-  
-                      {/* Price */}
-                      <td>{order.price}</td>
-  
-                      {/* Payment */}
-                      <td>
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`h-1.5 w-1.5 rounded-full ${paymentStyles[order.payment]}`}
-                          />
-                          <span>{order.payment}</span>
-                        </div>
-                      </td>
-  
-                      {/* Status */}
-                      <td>
-                        <div
-                          className={`flex items-center gap-1.5 font-medium ${statusStyles[order.status]}`}
-                        >
-                          <Truck size={13} strokeWidth={1.8} />
-                          <span>{order.status}</span>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-  
-          {/* Pagination */}
-          <div className="flex items-center justify-between px-4 py-7">
-            <button className="flex h-7 items-center gap-1 rounded-md border border-gray-100 px-2.5 text-[10px] text-gray-700 hover:bg-gray-50">
-              <ChevronLeft size={12} />
-              Previous
-            </button>
-  
-            <div className="flex items-center gap-2">
-              <button className="flex h-7 w-7 items-center justify-center rounded-md bg-[#b9e6b0] font-medium text-gray-700">
-                1
-              </button>
-  
-              <button className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200">
-                2
-              </button>
-  
-              <button className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200">
-                3
-              </button>
-  
-              <button className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200">
-                4
-              </button>
-  
-              <button className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200">
-                5
-              </button>
-  
-              <button className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200">
-                ...
-              </button>
-  
-              <button className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200">
-                24
-              </button>
-            </div>
-  
-            <button className="flex h-7 items-center gap-1 rounded-md border border-gray-100 px-2.5 text-[10px] text-gray-700 hover:bg-gray-50">
-              Next
-              <ChevronRight size={12} />
-            </button>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2">
+
+            {/* Search */}
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search order report"
+              className="!w-56 !h-9 !rounded-lg"
+            />
+
+            {/* Filter */}
+            <Button
+              className="!h-9 !w-9 !p-0 flex items-center justify-center"
+              icon={<SlidersHorizontal size={15} />}
+            />
+
+            {/* Sort */}
+            <Button
+              className="!h-9 !w-9 !p-0 flex items-center justify-center"
+              icon={<ArrowDownUp size={15} />}
+            />
+
+            {/* More */}
+            <Dropdown
+              menu={{ items: menuItems }}
+              trigger={["click"]}
+            >
+              <Button
+                className="!h-9 !w-9 !p-0 flex items-center justify-center"
+                icon={<MoreHorizontal size={16} />}
+              />
+            </Dropdown>
+
           </div>
         </div>
+
+        {/* Table */}
+        <div className="px-6">
+          <Table
+            columns={columns}
+            dataSource={filteredOrders}
+            pagination={false}
+            scroll={{ x: 900 }}
+            rowClassName={() => "content-bg-in h-[58px]"}
+          />
+        </div>
+
+        {/* Pagination */}
+        <div className="flex items-center justify-between px-6 py-6">
+
+          <span className="text-sm ">
+            Showing {filteredOrders.length} of {orders.length} orders
+          </span>
+
+          <Pagination
+            defaultCurrent={1}
+            total={240}
+            pageSize={10}
+            showSizeChanger={false}
+          />
+
+        </div>
+
       </div>
-    );
-  }
-  
+    </div>
+  );
+}
+

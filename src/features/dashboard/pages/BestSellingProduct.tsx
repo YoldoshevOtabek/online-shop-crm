@@ -46,7 +46,7 @@ export const BestSellingProduct = () => {
     maxPrice: "",
   });
   return (
-    <div className="mood shadow-[0px_1px_3px_0px_#00000033] rounded-lg col-span-8 p-2.5">
+    <div className="content-mood shadow-[0px_1px_3px_0px_#00000033] rounded-lg col-span-8 p-2.5">
       <div className="flex justify-between items-center">
         <span className="text-[18px]">Best Selling Product</span>
         <button onClick={()=> setOpenModal(!openModal)} className="bg-green-800 text-white text-[14px] rounded-lg px-3 py-1.5 flex items-center gap-2 cursor-pointer">

@@ -63,23 +63,32 @@ body{
 .layout-header{
     border-bottom: 2px solid #0000001F;
 }
-.total-card{
+.content-mood{
   background-color: var(--bg-surface);
   color: var(--text);
   border-color: var(--border);
 }
-.apexChart{
-  background-color: var(--bg-surface);
+.content-bg{
+  background-color: var(--bg-elevated);
+}
+.content-bg-in{
+  background-color: var(--bg-page);
   color: var(--text);
   border-color: var(--border);
 }
-.userInfo{
-  background-color: var(--bg-surface);
-  color: var(--text);
-  border-color: var(--border);
+.ant-table-tbody > tr:hover > td {
+  background-color: var(--border-strong) !important;
 }
-.mood{
-  background-color: var(--bg-surface);
-  color: var(--text);
-  border-color: var(--border);
+.dark .ant-pagination .ant-pagination-prev .ant-pagination-item-link,
+.dark .ant-pagination .ant-pagination-next .ant-pagination-item-link {
+  color: white !important;
+  background: #023337 !important;
+  border-color: #023337 !important;
+}
+
+.dark .ant-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
+.dark .ant-pagination .ant-pagination-next:hover .ant-pagination-item-link {
+  color: white !important;
+  background: #023337 !important;
+  border-color: #023337 !important;
 }

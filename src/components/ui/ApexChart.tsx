@@ -78,7 +78,7 @@ const ApexChart = () => {
   };
 
   return (
-    <div className="apexChart shadow-[0px_1px_3px_0px_#00000033] rounded-lg col-span-8 p-2.5">
+    <div className="content-mood shadow-[0px_1px_3px_0px_#00000033] rounded-lg col-span-8 p-2.5">
       <ReactApexChart
         options={options}
         series={series}

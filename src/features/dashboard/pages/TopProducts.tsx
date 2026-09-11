@@ -27,7 +27,7 @@ const products = [
   ];
 export const TopProducts = () => {
   return (
-    <div className="bestSelling shadow-[0px_1px_3px_0px_#00000033] rounded-lg col-span-4 p-[20px_65px_10px_16px]">
+    <div className="content-mood shadow-[0px_1px_3px_0px_#00000033] rounded-lg col-span-4 p-[20px_65px_10px_16px]">
         <div className="flex items-center justify-between px-4 ">
         <h2 className="text-[18px] font-semibold ">
           Top Products

@@ -48,12 +48,12 @@ export const Header = () => {
           <div className="flex items-center">
             <button
               className={`mood w-10 h-7 rounded-full p-1 flex items-center transition-all duration-300
-               ${theme ? "bg-[#69898b] justify-end" : "bg-[#EAF7E8] justify-start"}
+               ${theme ? "bg-[#69898b] justify-end" : "bg-[#b3eea4] justify-start"}
                 `}
               onClick={() => setTheme(!theme)}
             >
               <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm">
-                {theme ? (
+                {!theme ? (
                   <Sun size={13} className="text-yellow-500" />
                 ) : (
                   <Moon size={13} className="text-[#023337]" />

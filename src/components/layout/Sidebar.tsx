@@ -72,9 +72,9 @@ export const Sidebar = () => {
             </div> : "" }
             
           
-            <button onClick={handleLogout} className={`${openToggle? "mt-3" : ""} flex justify-center items-center`}>
+            <div onClick={handleLogout} className={`${openToggle? "mt-3" : ""} flex justify-center items-center`}>
             <i className="bi bi-box-arrow-left text-red-600 cursor-pointer"></i>
-            </button> 
+            </div> 
             
         </div>
 

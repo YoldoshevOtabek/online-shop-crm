@@ -11,7 +11,7 @@ export const Dashboard = () => {
     <div className="grid grid-cols-3 gap-4 w-full">
       
       {/* Total Sales */}
-      <div className="total-card h-55.5 rounded-lg p-5 ">
+      <div className="content-mood h-55.5 rounded-lg p-5 ">
         <div className="flex justify-between items-center">
           <b className="text-[18px] ">Total Sales</b>
           <span>
@@ -44,7 +44,7 @@ export const Dashboard = () => {
       </div>
   
       {/* Total Orders */}
-      <div className="total-card h-55.5 rounded-lg p-5 ">
+      <div className="content-mood h-55.5 rounded-lg p-5 ">
         <div className="flex justify-between items-center">
           <b className="text-[18px]">Total Orders</b>
           <span>
@@ -77,7 +77,7 @@ export const Dashboard = () => {
       </div>
   
       {/* Pending & Canceled */}
-      <div className="total-card h-55.5 rounded-lg p-5 ">
+      <div className="content-mood h-55.5 rounded-lg p-5 ">
         <div className="flex justify-between items-center">
           <b className="text-[18px]">
             Pending & Canceled

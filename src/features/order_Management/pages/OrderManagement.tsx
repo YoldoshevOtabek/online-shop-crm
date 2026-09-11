@@ -20,7 +20,7 @@ export const OrderManagement = () => {
 
         <div className="grid grid-cols-12 gap-3.5 mt-6">
           {/* Totak Orders */}
-        <div className="col-span-3 total-card  rounded-lg p-5 ">
+        <div className="col-span-3 content-mood  rounded-lg p-5 ">
             <div className="flex justify-between items-center">
               <b className="text-[18px]">Total Orders</b>
               <span>
@@ -42,7 +42,7 @@ export const OrderManagement = () => {
             </span>
         </div>
           {/* New Orders */}
-        <div className="col-span-3 total-card  rounded-lg p-5 ">
+        <div className="col-span-3 content-mood  rounded-lg p-5 ">
             <div className="flex justify-between items-center">
               <b className="text-[18px]">New Orders</b>
               <span>
@@ -64,7 +64,7 @@ export const OrderManagement = () => {
             </span>
         </div>
           {/* Completed Orders */}
-        <div className="col-span-3 total-card  rounded-lg p-5 ">
+        <div className="col-span-3 content-mood  rounded-lg p-5 ">
             <div className="flex justify-between items-center">
               <b className="text-[18px]">Completed Orders</b>
               <span>
@@ -86,7 +86,7 @@ export const OrderManagement = () => {
             </span>
         </div>
           {/* Canceled Orders */}
-        <div className="col-span-3 total-card  rounded-lg p-5 ">
+        <div className="col-span-3 content-mood  rounded-lg p-5 ">
             <div className="flex justify-between items-center">
               <b className="text-[18px]">Canceled Orders</b>
               <span>
@@ -111,7 +111,7 @@ export const OrderManagement = () => {
         </div>
 
 {/* Order List Table  */}
-        <div className="">
+        <div className="mt-4">
           <OrdersTable/>
         </div>
         
