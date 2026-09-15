@@ -22,6 +22,9 @@ http.interceptors.response.use((response) => response, async (err) => {
     return Promise.reject(err)
   }
   return Promise.reject(err)
-})
+  
+  }
+
+)
 
 export default http;

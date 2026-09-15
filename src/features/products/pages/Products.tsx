@@ -1,7 +1,12 @@
+import AddProduct from "./AddProducts"
+
 
 
 export const Products = () => {
   return (
-    <div>Products</div>
+    <div className="flex">
+      <AddProduct/>
+    
+    </div>
   )
 }

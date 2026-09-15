@@ -76,6 +76,17 @@ body{
   color: var(--text);
   border-color: var(--border);
 }
+.content-input{
+  background-color: var(--bg-page);
+  color: var(--text);
+  border-color: var(--bg-muted);
+}
+.content-search{
+  background-color: var(--bg-surface);
+  color: var(--text);
+  border-color: var(--bg-muted);
+}
+
 .ant-table-tbody > tr:hover > td {
   background-color: var(--border-strong) !important;
 }
@@ -89,6 +100,6 @@ body{
 .dark .ant-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
 .dark .ant-pagination .ant-pagination-next:hover .ant-pagination-item-link {
   color: white !important;
-  background: #023337 !important;
+  background: #2d4242 !important;
   border-color: #023337 !important;
 }

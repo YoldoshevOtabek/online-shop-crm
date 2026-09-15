@@ -1,4 +1,4 @@
-const TOKEN_KEY = "crmToken";
+const TOKEN_KEY = "crmAccessToken";
 
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);

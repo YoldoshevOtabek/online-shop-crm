@@ -6,6 +6,7 @@ import {
   SlidersHorizontal,
   Truck,
 } from "lucide-react";
+
 import {
   Button,
   Checkbox,
@@ -15,296 +16,368 @@ import {
   Table,
   Tag,
 } from "antd";
+
 import type { ColumnsType } from "antd/es/table";
 import type { MenuProps } from "antd";
 
-type Order = {
-  key: string;
-  id: string;
-  product: string;
-  date: string;
-  price: string;
-  payment: "Paid" | "Unpaid";
-  status: "Delivered" | "Pending" | "Shipped" | "Cancelled";
-  icon: string;
-};
+import type { OrdersTableProps } from "../types/order";
 
-const orders: Order[] = [
-  {
-    key: "1",
-    id: "#ORD0001",
-    product: "Wireless Bluetooth Headphones",
-    date: "01-01-2025",
-    price: "49.99",
-    payment: "Paid",
-    status: "Delivered",
-    icon: "🎧",
-  },
-  {
-    key: "2",
-    id: "#ORD0002",
-    product: "Men's T-Shirt",
-    date: "01-01-2025",
-    price: "14.99",
-    payment: "Unpaid",
-    status: "Pending",
-    icon: "👕",
-  },
-  {
-    key: "3",
-    id: "#ORD0003",
-    product: "Men's Leather Wallet",
-    date: "01-01-2025",
-    price: "49.99",
-    payment: "Paid",
-    status: "Delivered",
-    icon: "👛",
-  },
-  {
-    key: "4",
-    id: "#ORD0004",
-    product: "Memory Foam Pillow",
-    date: "01-01-2025",
-    price: "39.99",
-    payment: "Paid",
-    status: "Shipped",
-    icon: "🛏️",
-  },
-  {
-    key: "5",
-    id: "#ORD0005",
-    product: "Adjustable Dumbbells",
-    date: "01-01-2025",
-    price: "14.99",
-    payment: "Unpaid",
-    status: "Pending",
-    icon: "🏋️",
-  },
-  {
-    key: "6",
-    id: "#ORD0006",
-    product: "Coffee Maker",
-    date: "01-01-2025",
-    price: "79.99",
-    payment: "Unpaid",
-    status: "Cancelled",
-    icon: "☕",
-  },
-  {
-    key: "7",
-    id: "#ORD0007",
-    product: "Casual Baseball Cap",
-    date: "01-01-2025",
-    price: "49.99",
-    payment: "Paid",
-    status: "Delivered",
-    icon: "🧢",
-  },
-  {
-    key: "8",
-    id: "#ORD0008",
-    product: "Full HD Webcam",
-    date: "01-01-2025",
-    price: "39.99",
-    payment: "Paid",
-    status: "Delivered",
-    icon: "📷",
-  },
-  {
-    key: "9",
-    id: "#ORD0009",
-    product: "Smart LED Color Bulb",
-    date: "01-01-2025",
-    price: "79.99",
-    payment: "Unpaid",
-    status: "Delivered",
-    icon: "💡",
-  },
-  {
-    key: "10",
-    id: "#ORD0010",
-    product: "Men's T-Shirt",
-    date: "01-01-2025",
-    price: "14.99",
-    payment: "Unpaid",
-    status: "Delivered",
-    icon: "👕",
-  },
-];
+type TabType =
+  | "All"
+  | "Completed"
+  | "Pending"
+  | "Canceled";
 
-type TabType = "All" | "Completed" | "Pending" | "Canceled";
+export default function OrdersTable({
+  orders,
+}: OrdersTableProps) {
+  const [activeTab, setActiveTab] =
+    useState<TabType>("All");
 
-export default function OrdersTable() {
-  const [activeTab, setActiveTab] = useState<TabType>("All");
   const [search, setSearch] = useState("");
 
-  // Tab bo'yicha filter
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const pageSize = 10;
+
+  /*
+   * ================================
+   * TAB BO'YICHA FILTER
+   * ================================
+   */
+
   const filteredByTab = orders.filter((order) => {
-    if (activeTab === "All") return true;
+    if (activeTab === "All") {
+      return true;
+    }
 
     if (activeTab === "Completed") {
-      return order.status === "Delivered";
+      return order.status === "DELIVERED";
     }
 
     if (activeTab === "Pending") {
-      return order.status === "Pending";
+      return order.status === "PENDING";
     }
 
     if (activeTab === "Canceled") {
-      return order.status === "Cancelled";
+      return order.status === "CANCELLED";
     }
 
     return true;
   });
 
-  // Search
-  const filteredOrders = filteredByTab.filter((order) =>
-    `${order.id} ${order.product} ${order.payment} ${order.status}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
+  /*
+   * ================================
+   * SEARCH
+   * ================================
+   */
+
+  const filteredOrders = filteredByTab.filter(
+    (order) => {
+      const productName =
+        order.items?.[0]?.productName || "";
+
+      const customerName =
+        `${order.customerSnapshot?.firstName || ""} ${
+          order.customerSnapshot?.lastName || ""
+        }`;
+
+      const searchText = `
+        ${order.orderNumber}
+        ${productName}
+        ${order.paymentStatus}
+        ${order.status}
+        ${customerName}
+        ${order.customerSnapshot?.phone || ""}
+        ${order.customerSnapshot?.email || ""}
+      `;
+
+      return searchText
+        .toLowerCase()
+        .includes(search.toLowerCase());
+    }
   );
 
-  const columns: ColumnsType<Order> = [
+  /*
+   * ================================
+   * PAGINATION
+   * ================================
+   */
+
+  const startIndex =
+    (currentPage - 1) * pageSize;
+
+  const paginatedOrders =
+    filteredOrders.slice(
+      startIndex,
+      startIndex + pageSize
+    );
+
+  /*
+   * ================================
+   * TABLE COLUMNS
+   * ================================
+   */
+
+  const columns: ColumnsType<
+    OrdersTableProps["orders"][number]
+  > = [
+    /*
+     * No.
+     */
+
     {
       title: "No.",
       key: "number",
       width: 70,
+
       render: (_, __, index) => (
         <div className="flex items-center gap-2">
           <Checkbox />
-          <span>{index + 1}</span>
+
+          <span>
+            {startIndex + index + 1}
+          </span>
         </div>
       ),
     },
+
+    /*
+     * Order ID
+     */
 
     {
       title: "Order Id",
-      dataIndex: "id",
-      key: "id",
-      width: 130,
-      render: (id) => (
-        <span className="font-medium ">{id}</span>
+      dataIndex: "orderNumber",
+      key: "orderNumber",
+      width: 160,
+
+      render: (orderNumber) => (
+        <span className="font-medium">
+          #{orderNumber}
+        </span>
       ),
     },
+
+    /*
+     * Product
+     */
 
     {
       title: "Product",
-      dataIndex: "product",
       key: "product",
-      width: 280,
-      render: (product, record) => (
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 text-lg">
-            {record.icon}
-          </div>
+      width: 300,
 
-          <span className="font-medium ">
-            {product}
-          </span>
-        </div>
-      ),
+      render: (_, record) => {
+        const product =
+          record.items?.[0];
+
+        return (
+          <div className="flex items-center gap-3">
+
+            <img
+              src={product?.productImage}
+              alt={
+                product?.productName ||
+                "Product"
+              }
+              className="h-9 w-9 shrink-0 rounded-lg border border-gray-200 bg-gray-50 object-cover"
+            />
+
+            <div className="min-w-0">
+
+              <p className="truncate font-medium">
+                {product?.productName ||
+                  "No product"}
+              </p>
+
+              {product?.productSku && (
+                <span className="text-xs text-gray-400">
+                  SKU:{" "}
+                  {product.productSku}
+                </span>
+              )}
+
+            </div>
+          </div>
+        );
+      },
     },
+
+    /*
+     * Date
+     */
 
     {
       title: "Date",
-      dataIndex: "date",
-      key: "date",
-      width: 130,
+      dataIndex: "createdAt",
+      key: "createdAt",
+      width: 150,
+
+      render: (date) => (
+        <span>
+          {new Date(
+            date
+          ).toLocaleDateString("en-GB")}
+        </span>
+      ),
     },
+
+    /*
+     * Price
+     */
 
     {
       title: "Price",
-      dataIndex: "price",
-      key: "price",
-      width: 110,
+      dataIndex: "total",
+      key: "total",
+      width: 170,
+
       render: (price) => (
-        <span className="font-medium">${price}</span>
+        <span className="font-medium">
+          {Number(price).toLocaleString(
+            "uz-UZ"
+          )}{" "}
+          so'm
+        </span>
       ),
     },
+
+    /*
+     * Payment
+     */
 
     {
       title: "Payment",
-      dataIndex: "payment",
-      key: "payment",
+      dataIndex: "paymentStatus",
+      key: "paymentStatus",
       width: 130,
-      render: (payment) => (
-        <div className="flex items-center gap-2">
-          <span
-            className={`h-2 w-2 rounded-full ${
-              payment === "Paid"
-                ? "bg-emerald-500"
-                : "bg-red-500"
-            }`}
-          />
 
-          <span
-            className={
-              payment === "Paid"
-                ? "text-emerald-600"
-                : "text-red-500"
-            }
-          >
-            {payment}
-          </span>
-        </div>
-      ),
+      render: (payment) => {
+        const paid =
+          payment === "PAID";
+
+        return (
+          <div className="flex items-center gap-2">
+
+            <span
+              className={`h-2 w-2 rounded-full ${
+                paid
+                  ? "bg-emerald-500"
+                  : "bg-red-500"
+              }`}
+            />
+
+            <span
+              className={
+                paid
+                  ? "text-emerald-600"
+                  : "text-red-500"
+              }
+            >
+              {paid
+                ? "Paid"
+                : "Unpaid"}
+            </span>
+
+          </div>
+        );
+      },
     },
+
+    /*
+     * Status
+     */
 
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
       width: 150,
+
       render: (status) => {
-        const statusConfig:any = {
-          Delivered: {
+        const statusConfig: Record<
+          string,
+          {
+            color:
+              | "success"
+              | "warning"
+              | "default"
+              | "error";
+            text: string;
+          }
+        > = {
+          DELIVERED: {
             color: "success",
             text: "Delivered",
           },
-          Pending: {
+
+          PENDING: {
             color: "warning",
             text: "Pending",
           },
-          Shipped: {
+
+          SHIPPED: {
             color: "default",
             text: "Shipped",
           },
-          Cancelled: {
+
+          CANCELLED: {
             color: "error",
             text: "Cancelled",
           },
-        } as const;
+        };
 
-        const config = statusConfig[status];
+        const config =
+          statusConfig[status];
 
         return (
           <Tag
-            color={config.color}
+            color={
+              config?.color ||
+              "default"
+            }
             className="flex w-fit items-center gap-1 rounded-full px-3 py-1"
           >
             <Truck size={13} />
-            {config.text}
+
+            {config?.text ||
+              status}
           </Tag>
         );
       },
     },
   ];
 
+  /*
+   * ================================
+   * MORE ACTION
+   * ================================
+   */
+
   const menuItems: MenuProps["items"] = [
     {
       key: "1",
       label: "View order",
     },
+
     {
       key: "2",
       label: "Edit order",
     },
+
     {
       key: "3",
       label: "Delete order",
       danger: true,
     },
   ];
+
+  /*
+   * ================================
+   * TABS
+   * ================================
+   */
 
   const tabs: {
     label: string;
@@ -316,49 +389,71 @@ export default function OrdersTable() {
       value: "All",
       count: orders.length,
     },
+
     {
       label: "Completed",
       value: "Completed",
       count: orders.filter(
-        (item) => item.status === "Delivered"
+        (item) =>
+          item.status === "DELIVERED"
       ).length,
     },
+
     {
       label: "Pending",
       value: "Pending",
       count: orders.filter(
-        (item) => item.status === "Pending"
+        (item) =>
+          item.status === "PENDING"
       ).length,
     },
+
     {
       label: "Canceled",
       value: "Canceled",
       count: orders.filter(
-        (item) => item.status === "Cancelled"
+        (item) =>
+          item.status === "CANCELLED"
       ).length,
     },
   ];
 
+  /*
+   * ================================
+   * RETURN
+   * ================================
+   */
+
   return (
-    <div className="content-bg w-full min-h-[calc(100vh-96px)] bg-white p-6">
+    <div className="content-bg min-h-[calc(100vh-96px)] w-full bg-white p-6">
 
       {/* Main Card */}
+
       <div className="content-mood w-full rounded-xl border border-[#d9e9d6] bg-white shadow-[0px_1px_3px_0px_#00000033]">
 
         {/* Header */}
+
         <div className="flex items-center justify-between gap-5 px-6 py-5">
 
           {/* Tabs */}
+
           <div className="flex items-center rounded-lg bg-[#eaf6e7] p-1">
 
             {tabs.map((tab) => (
               <button
                 key={tab.value}
-                onClick={() => setActiveTab(tab.value)}
+                onClick={() => {
+                  setActiveTab(
+                    tab.value
+                  );
+
+                  setCurrentPage(1);
+                }}
                 className={`
                   h-9 rounded-md px-5 text-sm transition-all
                   ${
-                    activeTab === tab.value
+                    activeTab ===
+                    tab.value
                       ? "bg-white font-semibold text-gray-800 shadow-sm"
                       : "text-gray-500 hover:text-gray-800"
                   }
@@ -368,7 +463,8 @@ export default function OrdersTable() {
 
                 <span
                   className={`ml-1.5 ${
-                    activeTab === tab.value
+                    activeTab ===
+                    tab.value
                       ? "text-emerald-500"
                       : "text-gray-400"
                   }`}
@@ -381,36 +477,61 @@ export default function OrdersTable() {
           </div>
 
           {/* Actions */}
+
           <div className="flex items-center gap-2">
 
             {/* Search */}
+
             <Input
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(
+                  e.target.value
+                );
+
+                setCurrentPage(1);
+              }}
               placeholder="Search order report"
-              className="!w-56 !h-9 !rounded-lg"
+              className="!h-9 !w-56 !rounded-lg"
             />
 
             {/* Filter */}
+
             <Button
-              className="!h-9 !w-9 !p-0 flex items-center justify-center"
-              icon={<SlidersHorizontal size={15} />}
+              className="h-9! flex w-9! items-center justify-center p-0!"
+              icon={
+                <SlidersHorizontal
+                  size={15}
+                />
+              }
             />
 
             {/* Sort */}
+
             <Button
-              className="!h-9 !w-9 !p-0 flex items-center justify-center"
-              icon={<ArrowDownUp size={15} />}
+              className="h-9! flex w-9! items-center justify-center p-0!"
+              icon={
+                <ArrowDownUp
+                  size={15}
+                />
+              }
             />
 
             {/* More */}
+
             <Dropdown
-              menu={{ items: menuItems }}
+              menu={{
+                items: menuItems,
+              }}
               trigger={["click"]}
             >
               <Button
-                className="!h-9 !w-9 !p-0 flex items-center justify-center"
-                icon={<MoreHorizontal size={16} />}
+                className="h-9! flex w-9! items-center justify-center p-0!"
+                icon={
+                  <MoreHorizontal
+                    size={16}
+                  />
+                }
               />
             </Dropdown>
 
@@ -418,28 +539,69 @@ export default function OrdersTable() {
         </div>
 
         {/* Table */}
+
         <div className="px-6">
+
           <Table
             columns={columns}
-            dataSource={filteredOrders}
+            dataSource={
+              paginatedOrders
+            }
+            rowKey="id"
             pagination={false}
-            scroll={{ x: 900 }}
-            rowClassName={() => "content-bg-in h-[58px]"}
+            scroll={{
+              x: 1000,
+            }}
+            rowClassName={() =>
+              "content-bg-in h-[58px]"
+            }
+            locale={{
+              emptyText:
+                "No orders found",
+            }}
           />
+
         </div>
 
         {/* Pagination */}
+
         <div className="flex items-center justify-between px-6 py-6">
 
-          <span className="text-sm ">
-            Showing {filteredOrders.length} of {orders.length} orders
+          <span className="text-sm">
+
+            Showing{" "}
+
+            {filteredOrders.length ===
+            0
+              ? 0
+              : startIndex + 1}
+
+            {" - "}
+
+            {Math.min(
+              startIndex +
+                pageSize,
+              filteredOrders.length
+            )}
+
+            {" of "}
+
+            {filteredOrders.length}
+
+            {" orders"}
+
           </span>
 
           <Pagination
-            defaultCurrent={1}
-            total={240}
-            pageSize={10}
+            current={currentPage}
+            total={
+              filteredOrders.length
+            }
+            pageSize={pageSize}
             showSizeChanger={false}
+            onChange={(page) => {
+              setCurrentPage(page);
+            }}
           />
 
         </div>
