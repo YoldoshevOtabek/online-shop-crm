@@ -134,7 +134,7 @@ const CategoryModal = ({ open, onClose,category }: CategoryModalProps) => {
             type="button"
             onClick={handleClose}
             disabled={isPending}
-            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md text-gray-400 transition hover:bg-white/10 hover:text-white"
+            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md text-gray-400 transition hover:bg-white/10 hover:text-red-500"
           >
             <X size={18} strokeWidth={2} />
           </button>

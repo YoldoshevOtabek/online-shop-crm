@@ -3,19 +3,15 @@ import {
   Table,
   Card,
   Avatar,
-  Tag,
   Button,
-  Input,
-  Space,
   Tooltip,
   message,
+  Select,
 } from "antd";
+
 import {
-  MessageOutlined,
-  DeleteOutlined,
   CopyOutlined,
   PhoneOutlined,
-  EnvironmentOutlined,
   FacebookFilled,
   WhatsAppOutlined,
   TwitterOutlined,
@@ -27,169 +23,12 @@ import {
 } from "@ant-design/icons";
 
 import "../styles/customers.css";
+import useCustomer from "../hooks/useCustomers";
+import useUpdateCustomerStatus from "../hooks/useUpdateStatus";
 
-const customers = [
-  {
-    key: 1,
-    customerId: "#CUST001",
-    name: "John Doe",
-    phone: "+1234567890",
-    email: "john.doe@example.com",
-    orderCount: 25,
-    totalSpend: "3,450.00",
-    status: "Active",
-    address: "123 Main St, NY",
-    registration: "15.01.2025",
-    lastPurchase: "10.01.2025",
-    totalOrders: 150,
-    completed: 140,
-    cancelled: 10,
-  },
-  {
-    key: 2,
-    customerId: "#CUST001",
-    name: "John Doe",
-    phone: "+1234567890",
-    email: "john.doe@example.com",
-    orderCount: 25,
-    totalSpend: "3,450.00",
-    status: "Active",
-    address: "123 Main St, NY",
-    registration: "15.01.2025",
-    lastPurchase: "10.01.2025",
-    totalOrders: 150,
-    completed: 140,
-    cancelled: 10,
-  },
-  {
-    key: 3,
-    customerId: "#CUST001",
-    name: "John Doe",
-    phone: "+1234567890",
-    email: "john.doe@example.com",
-    orderCount: 25,
-    totalSpend: "3,450.00",
-    status: "Active",
-    address: "123 Main St, NY",
-    registration: "15.01.2025",
-    lastPurchase: "10.01.2025",
-    totalOrders: 150,
-    completed: 140,
-    cancelled: 10,
-  },
-  {
-    key: 4,
-    customerId: "#CUST001",
-    name: "John Doe",
-    phone: "+1234567890",
-    email: "john.doe@example.com",
-    orderCount: 25,
-    totalSpend: "3,450.00",
-    status: "Active",
-    address: "123 Main St, NY",
-    registration: "15.01.2025",
-    lastPurchase: "10.01.2025",
-    totalOrders: 150,
-    completed: 140,
-    cancelled: 10,
-  },
-  {
-    key: 5,
-    customerId: "#CUST001",
-    name: "Jane Smith",
-    phone: "+1234567890",
-    email: "jane.smith@example.com",
-    orderCount: 5,
-    totalSpend: "250.00",
-    status: "Inactive",
-    address: "456 Park Ave, NY",
-    registration: "20.02.2025",
-    lastPurchase: "05.01.2025",
-    totalOrders: 40,
-    completed: 35,
-    cancelled: 5,
-  },
-  {
-    key: 6,
-    customerId: "#CUST001",
-    name: "Emily Davis",
-    phone: "+1234567890",
-    email: "emily.davis@example.com",
-    orderCount: 30,
-    totalSpend: "4,600.00",
-    status: "VIP",
-    address: "789 Broadway, NY",
-    registration: "11.01.2025",
-    lastPurchase: "12.01.2025",
-    totalOrders: 200,
-    completed: 195,
-    cancelled: 5,
-  },
-  {
-    key: 7,
-    customerId: "#CUST001",
-    name: "Jane Smith",
-    phone: "+1234567890",
-    email: "jane.smith@example.com",
-    orderCount: 5,
-    totalSpend: "250.00",
-    status: "Inactive",
-    address: "456 Park Ave, NY",
-    registration: "20.02.2025",
-    lastPurchase: "05.01.2025",
-    totalOrders: 40,
-    completed: 35,
-    cancelled: 5,
-  },
-  {
-    key: 8,
-    customerId: "#CUST001",
-    name: "John Doe",
-    phone: "+1234567890",
-    email: "john.doe@example.com",
-    orderCount: 25,
-    totalSpend: "3,450.00",
-    status: "Active",
-    address: "123 Main St, NY",
-    registration: "15.01.2025",
-    lastPurchase: "10.01.2025",
-    totalOrders: 150,
-    completed: 140,
-    cancelled: 10,
-  },
-  {
-    key: 9,
-    customerId: "#CUST001",
-    name: "Emily Davis",
-    phone: "+1234567890",
-    email: "emily.davis@example.com",
-    orderCount: 30,
-    totalSpend: "4,600.00",
-    status: "VIP",
-    address: "789 Broadway, NY",
-    registration: "11.01.2025",
-    lastPurchase: "12.01.2025",
-    totalOrders: 200,
-    completed: 195,
-    cancelled: 5,
-  },
-  {
-    key: 10,
-    customerId: "#CUST001",
-    name: "Jane Smith",
-    phone: "+1234567890",
-    email: "jane.smith@example.com",
-    orderCount: 5,
-    totalSpend: "250.00",
-    status: "Inactive",
-    address: "456 Park Ave, NY",
-    registration: "20.02.2025",
-    lastPurchase: "05.01.2025",
-    totalOrders: 40,
-    completed: 35,
-    cancelled: 5,
-  },
-];
+
+
+// ================= STATUS =================
 
 const statusConfig = {
   Active: {
@@ -200,13 +39,12 @@ const statusConfig = {
     color: "#ff4d4f",
     text: "Inactive",
   },
-  VIP: {
-    color: "#f59e0b",
-    text: "VIP",
-  },
 };
 
-function StatusTag({ status }) {
+
+// ================= STATUS TAG =================
+
+function StatusTag({ status }: { status: "Active" | "Inactive" }) {
   const config = statusConfig[status];
 
   return (
@@ -215,21 +53,76 @@ function StatusTag({ status }) {
         className="status-dot"
         style={{ backgroundColor: config.color }}
       />
-      <span style={{ color: config.color }}>{config.text}</span>
+
+      <span style={{ color: config.color }}>
+        {config.text}
+      </span>
     </span>
   );
 }
 
-function CustomerCard({ customer, onClose }) {
-  if (!customer) return null;
 
-  const copyText = async (text) => {
+// ================= CUSTOMER TYPE =================
+
+type Customer = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  avatar: string | null;
+  isActive: boolean;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+
+  _count?: {
+    orders: number;
+    reviews: number;
+  };
+
+  totalOrders: number;
+  totalSpent: number;
+};
+
+
+// ================= CUSTOMER CARD =================
+
+type CustomerCardProps = {
+  customer: Customer;
+  onClose: () => void;
+};
+
+function CustomerCard({
+  customer,
+  onClose,
+}: CustomerCardProps) {
+  const copyText = async (text: string) => {
     await navigator.clipboard.writeText(text);
     message.success("Copied!");
   };
 
+
+  const fullName = `${customer.firstName} ${customer.lastName}`;
+
+  const initials = `${customer.firstName?.[0] || ""}${
+    customer.lastName?.[0] || ""
+  }`;
+
+  const status = customer.isActive ? "Active" : "Inactive";
+
+  const registrationDate = new Date(
+    customer.createdAt
+  ).toLocaleDateString("en-GB");
+
+
   return (
-    <Card className="customer-card content-mood" bordered={false}>
+    <Card
+      className="customer-card content-mood"
+      bordered={false}
+    >
+      {/* CLOSE */}
+
       <div className="card-close">
         <Button
           type="text"
@@ -238,184 +131,351 @@ function CustomerCard({ customer, onClose }) {
         />
       </div>
 
-      {/* Header */}
+
+      {/* HEADER */}
+
       <div className="profile-header">
-        <Avatar size={48} className="profile-avatar">
-          {customer.name
-            .split(" ")
-            .map((item) => item[0])
-            .join("")}
+        <Avatar
+          size={48}
+          className="profile-avatar"
+          src={customer.avatar || undefined}
+        >
+          {initials}
         </Avatar>
 
         <div className="profile-name">
-          <h3>{customer.name}</h3>
+          <h3>{fullName}</h3>
+
           <div className="email">
             {customer.email}
+
             <Tooltip title="Copy email">
               <CopyOutlined
                 onClick={() => copyText(customer.email)}
               />
             </Tooltip>
           </div>
+
+          <StatusTag status={status} />
         </div>
       </div>
 
-      {/* Customer info */}
-      <div className="section-title">Customer Info</div>
+
+      {/* CUSTOMER INFO */}
+
+      <div className="section-title">
+        Customer Info
+      </div>
+
+
+      {/* PHONE */}
 
       <div className="info-input">
         <PhoneOutlined />
-        <span>{customer.phone}</span>
+
+        <span>
+          {customer.phone}
+        </span>
+
         <CopyOutlined
           className="copy-icon"
           onClick={() => copyText(customer.phone)}
         />
       </div>
 
+
+      {/* CUSTOMER ID */}
+
       <div className="info-input">
-        <EnvironmentOutlined />
-        <span>{customer.address}</span>
+        <span>ID:</span>
+
+        <span
+          style={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {customer.id}
+        </span>
+
+        <CopyOutlined
+          className="copy-icon"
+          onClick={() => copyText(customer.id)}
+        />
       </div>
 
-      {/* Social */}
-      <div className="section-title">Social Media</div>
+
+      {/* SOCIAL MEDIA */}
+
+      <div className="section-title">
+        Social Media
+      </div>
 
       <div className="socials">
         <span>
           <FacebookFilled />
         </span>
+
         <span>
           <WhatsAppOutlined />
         </span>
+
         <span>
           <TwitterOutlined />
         </span>
+
         <span>
           <LinkedinFilled />
         </span>
+
         <span>
           <InstagramFilled />
         </span>
       </div>
 
-      {/* Activity */}
-      <div className="section-title">Activity</div>
+
+      {/* ACTIVITY */}
+
+      <div className="section-title">
+        Activity
+      </div>
 
       <div className="activity-row">
+
         <div>
-          <small>Registration:</small>
-          <strong>{customer.registration}</strong>
+          <small>
+            Registration:
+          </small>
+
+          <strong>
+            {registrationDate}
+          </strong>
         </div>
 
         <div>
-          <small>Last purchase:</small>
-          <strong>{customer.lastPurchase}</strong>
+          <small>
+            Status:
+          </small>
+
+          <strong>
+            {status}
+          </strong>
         </div>
+
       </div>
 
-      {/* Overview */}
-      <div className="section-title">Order overview</div>
+
+      {/* ORDER OVERVIEW */}
+
+      <div className="section-title">
+        Order overview
+      </div>
 
       <div className="overview">
-        <div className="overview-item">
-          <strong>{customer.totalOrders}</strong>
-          <span>Total orders</span>
-        </div>
 
         <div className="overview-item">
-          <strong>{customer.completed}</strong>
-          <span>Completed</span>
+          <strong>
+            {customer.totalOrders}
+          </strong>
+
+          <span>
+            Total orders
+          </span>
         </div>
 
+
         <div className="overview-item">
-          <strong>{customer.cancelled}</strong>
-          <span>Cancelled</span>
+          <strong>
+            {customer._count?.reviews ?? 0}
+          </strong>
+
+          <span>
+            Reviews
+          </span>
         </div>
+
+
+        <div className="overview-item">
+          <strong>
+            {customer.totalSpent.toLocaleString()}
+          </strong>
+
+          <span>
+            Total spent
+          </span>
+        </div>
+
       </div>
+
     </Card>
   );
 }
 
+
+// ================= CUSTOMER TABLE =================
+
 export default function CustomerTable() {
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+  const {
+    customersData,
+    isLoading,
+    isError,
+  } = useCustomer();
+  
+  const {  mutate: updateStatus,
+          isPending: isUpdating,} = useUpdateCustomerStatus()
+
+  const [selectedCustomer, setSelectedCustomer] = 
+    useState<Customer | null>(null);
+
   const [page, setPage] = useState(1);
 
-  const handleDelete = (record) => {
-    message.success(`${record.name} deleted`);
+
+  // ================= DATA =================
+
+  const customers: Customer[] = Array.isArray(customersData)
+    ? customersData
+    : customersData?.data ?? [];
+
+
+  // ================= DELETE =================
+
+  const handleDelete = (record: Customer) => {
+    message.success(
+      `${record.firstName} ${record.lastName} deleted`
+    );
   };
+
+
+  // ================= COLUMNS =================
 
   const columns = [
     {
       title: "Customer Id",
-      dataIndex: "customerId",
-      key: "customerId",
+      dataIndex: "id",
+      key: "id",
       width: 105,
+
+      render: (id: string) => (
+        <Tooltip title={id}>
+          <span>
+            {id.slice(0, 8)}...
+          </span>
+        </Tooltip>
+      ),
     },
+
+
     {
       title: "Name",
-      dataIndex: "name",
       key: "name",
-      width: 100,
+      width: 140,
+
+      render: (_: any, record: Customer) => (
+        <span>
+          {record.firstName} {record.lastName}
+        </span>
+      ),
     },
+
+
     {
       title: "Phone",
       dataIndex: "phone",
       key: "phone",
-      width: 125,
+      width: 145,
     },
+
+
     {
       title: "Order Count",
-      dataIndex: "orderCount",
-      key: "orderCount",
-      align: "center",
-      width: 100,
+      dataIndex: "totalOrders",
+      key: "totalOrders",
+      align: "center" as const,
+      width: 110,
     },
+
+
     {
       title: "Total Spend",
-      dataIndex: "totalSpend",
-      key: "totalSpend",
-      align: "center",
-      width: 115,
+      dataIndex: "totalSpent",
+      key: "totalSpent",
+      align: "center" as const,
+      width: 130,
+
+      render: (value: number) =>
+        `${value.toLocaleString()} UZS`,
     },
+
+
     {
       title: "Status",
-      dataIndex: "status",
       key: "status",
-      width: 100,
-      render: (status) => <StatusTag status={status} />,
-    },
-    {
-      title: "Action",
-      key: "action",
-      width: 80,
-      render: (_, record) => (
-        <Space size={10}>
-          <Tooltip title="Message">
-            <MessageOutlined
-              className="action-icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                message.info(`Message ${record.name}`);
-              }}
-            />
-          </Tooltip>
-
-          <Tooltip title="Delete">
-            <DeleteOutlined
-              className="action-icon delete"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(record);
-              }}
-            />
-          </Tooltip>
-        </Space>
+      width: 150,
+    
+      render: (_: any, record: Customer) => (
+        <Select
+          value={record.isActive ? "Active" : "Inactive"}
+          loading={
+            isUpdating
+          }
+          style={{ width: 120 }}
+    
+          onChange={(value) => {
+            const isActive = value === "Active";
+    
+            updateStatus({
+              id: record.id,
+              isActive,
+            });
+          }}
+    
+          options={[
+            {
+              label: "Active",
+              value: "Active",
+            },
+            {
+              label: "Inactive",
+              value: "Inactive",
+            },
+          ]}
+        />
       ),
     },
+
+
+
+    
   ];
 
+
+  // ================= LOADING =================
+
+  if (isLoading) {
+    return (
+      <div className="customer-page">
+        Loading...
+      </div>
+    );
+  }
+
+
+  // ================= ERROR =================
+
+  if (isError) {
+    return (
+      <div className="customer-page">
+        Failed to load customers
+      </div>
+    );
+  }
+
+
   return (
-    <div className="customer-page ">
+    <div className="customer-page">
+
       <div
         className={
           selectedCustomer
@@ -423,73 +483,126 @@ export default function CustomerTable() {
             : "content-layout content-mood"
         }
       >
-        {/* TABLE */}
-        <div className="table-wrapper ">
+
+        {/* ================= TABLE ================= */}
+
+        <div className="table-wrapper">
+
           <Table
             className="content-mood"
+
             columns={columns}
+
             dataSource={customers}
+
+            rowKey="id"
+
             pagination={false}
+
             rowClassName={(record) =>
-              selectedCustomer?.key === record.key
+              selectedCustomer?.id === record.id
                 ? "selected-row content-mood"
-                : " content-mood"
+                : "content-mood"
             }
+
             onRow={(record) => ({
               onClick: () => {
                 setSelectedCustomer(record);
               },
             })}
+
             scroll={{ x: 750 }}
           />
 
-          {/* Pagination */}
-          <div className="pagination ">
+
+          {/* ================= PAGINATION ================= */}
+
+          <div className="pagination">
+
             <Button
               icon={<LeftOutlined />}
               disabled={page === 1}
-              onClick={() => setPage(Math.max(1, page - 1))}
+              onClick={() =>
+                setPage(
+                  Math.max(1, page - 1)
+                )
+              }
             >
               Previous
             </Button>
 
-            <div className="page-numbers">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <Button
-                  key={item}
-                  type={page === item ? "primary" : "default"}
-                  onClick={() => setPage(item)}
-                >
-                  {item}
-                </Button>
-              ))}
 
-              <span>...</span>
+            <div className="page-numbers">
+
+              {[1, 2, 3].map(
+                (item) => (
+                  <Button
+                    key={item}
+                    type={
+                      page === item
+                        ? "primary"
+                        : "default"
+                    }
+                    onClick={() =>
+                      setPage(item)
+                    }
+                  >
+                    {item}
+                  </Button>
+                )
+              )}
+
+
+              <span>
+                ...
+              </span>
+
 
               <Button
-                onClick={() => setPage(24)}
-                type={page === 24 ? "primary" : "default"}
+                onClick={() =>
+                  setPage(24)
+                }
+                type={
+                  page === 24
+                    ? "primary"
+                    : "default"
+                }
               >
                 24
               </Button>
+
             </div>
 
+
             <Button
-              onClick={() => setPage(Math.min(24, page + 1))}
+              disabled={page === 24}
+              onClick={() =>
+                setPage(
+                  Math.min(24, page + 1)
+                )
+              }
             >
               Next <RightOutlined />
             </Button>
+
           </div>
+
         </div>
 
-        {/* RIGHT CARD */}
+
+        {/* ================= RIGHT CARD ================= */}
+
         {selectedCustomer && (
           <CustomerCard
             customer={selectedCustomer}
-            onClose={() => setSelectedCustomer(null)}
+            onClose={() =>
+              setSelectedCustomer(null)
+            }
           />
         )}
+
       </div>
+
     </div>
   );
 }

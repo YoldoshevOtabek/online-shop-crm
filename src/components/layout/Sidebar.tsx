@@ -29,9 +29,9 @@ export const Sidebar = () => {
             }
         </div>
 
-        <menu className="p-3.5">
+        <menu className="p-2.5">
             {
-              ! openToggle? <span className="text-[15px] mt-2 p-3.5">Main menu</span> : ""}
+              ! openToggle? <span className="text-[15px] mt-1 p-3.5">Main menu</span> : ""}
             {sidebarMenu.map((item) => {
         const Icon = item.icon;
 
@@ -40,7 +40,7 @@ export const Sidebar = () => {
             key={item.id}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 mb-2 rounded-md p-3.5
+              `flex items-center gap-3 px-4 py-2 mb-2 rounded-md p-3.5
               ${
                 isActive
                   ? "bg-[#4EA674] text-white"
